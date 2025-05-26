@@ -22,11 +22,11 @@ export default function TrendingSidebar() {
       <Card>
         <CardContent className="p-4">
           <div className="flex items-center space-x-3 mb-4">
-            <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center">
-              <span className="text-lg font-bold">Z</span>
+            <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center  cursor-pointer">
+              <span className="text-lg font-bold">筷</span>
             </div>
-            <div>
-              <h3 className="font-medium">ztkk</h3>
+            <div className="flex gap-1 items-center  cursor-pointer">
+              <h3 className="font-medium">筷筷</h3>
               <p className="text-sm text-gray-500">&gt;</p>
             </div>
           </div>
@@ -44,7 +44,7 @@ export default function TrendingSidebar() {
               <div className="text-sm text-gray-500">关注</div>
             </div>
           </div>
-          <div className="grid grid-cols-4 gap-2 mt-4">
+          <div className="grid grid-cols-2 gap-2 mt-4">
             <div className="text-center">
               <div className="w-8 h-8 bg-blue-100 rounded mx-auto mb-1 flex items-center justify-center">
                 <span className="text-blue-600 text-xs">写</span>
@@ -56,18 +56,6 @@ export default function TrendingSidebar() {
                 <span className="text-green-600 text-xs">发</span>
               </div>
               <span className="text-xs">发微头条</span>
-            </div>
-            <div className="text-center">
-              <div className="w-8 h-8 bg-purple-100 rounded mx-auto mb-1 flex items-center justify-center">
-                <span className="text-purple-600 text-xs">问</span>
-              </div>
-              <span className="text-xs">写问答</span>
-            </div>
-            <div className="text-center">
-              <div className="w-8 h-8 bg-orange-100 rounded mx-auto mb-1 flex items-center justify-center">
-                <span className="text-orange-600 text-xs">发</span>
-              </div>
-              <span className="text-xs">发视频</span>
             </div>
           </div>
         </CardContent>
@@ -84,11 +72,11 @@ export default function TrendingSidebar() {
         <CardContent className="pt-0">
           <div className="grid grid-cols-2 gap-2">
             <div className="bg-white rounded p-2 text-center">
-              <div className="text-xs font-medium text-red-600">关系反诈指南</div>
+              <div className="text-xs font-medium text-red-600">头条反诈指南</div>
               <div className="text-xs text-gray-500 mt-1">警方提醒防诈骗</div>
             </div>
             <div className="bg-white rounded p-2 text-center">
-              <div className="text-xs font-medium text-orange-600">帐号连规说明</div>
+              <div className="text-xs font-medium text-orange-600">帐号违规说明</div>
               <div className="text-xs text-gray-500 mt-1">平台规范说明</div>
             </div>
           </div>
