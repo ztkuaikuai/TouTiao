@@ -19,9 +19,6 @@ export default function Header() {
               下载头条APP
             </a>
             <a href="#" className="hover:text-gray-300">
-              深圳头条
-            </a>
-            <a href="#" className="hover:text-gray-300">
               关于头条
             </a>
             <a href="#" className="hover:text-gray-300">
@@ -38,17 +35,17 @@ export default function Header() {
               <span>多云 25°C</span>
               <span className="text-gray-400">霾</span>
             </div>
-            <Button variant="ghost" size="sm" className="text-white hover:text-gray-300">
+            <Button variant="ghost" size="sm" className="text-white hover:bg-gray-800 hover:text-white">
               <Bell className="w-4 h-4 mr-1" />
               消息
             </Button>
-            <Button variant="ghost" size="sm" className="text-white hover:text-gray-300">
+            <Button variant="ghost" size="sm" className="text-white hover:bg-gray-800 hover:text-white">
               <Edit className="w-4 h-4 mr-1" />
               发布作品
             </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="text-white hover:text-gray-300">
+                <Button variant="ghost" size="sm" className="text-white hover:bg-gray-800 hover:text-white">
                   <User className="w-4 h-4 mr-1" />
                   ztkk
                 </Button>
