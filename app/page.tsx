@@ -1,6 +1,7 @@
 import Header from "@/components/header"
 import NewsFeed from "@/components/news-feed"
 import TrendingSidebar from "@/components/trending-sidebar"
+import FloatingActionButtons from "@/components/floating-action-buttons"
 
 export default function Home() {
   return (
@@ -31,7 +32,7 @@ export default function Home() {
             <a href="#" className="hover:text-gray-900">
               用户协议
             </a>
-            <a href="#" className="hover:text-gray-900">
+            <a href="#" className="hover:text-gray-300">
               隐私政策
             </a>
             <a href="#" className="hover:text-gray-900">
@@ -55,6 +56,9 @@ export default function Home() {
           </div>
         </div>
       </footer>
+
+      {/* Floating Action Buttons */}
+      <FloatingActionButtons />
     </div>
   )
 }
