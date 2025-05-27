@@ -2,8 +2,6 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Search } from "lucide-react"
 
 const tabs = [
   { id: "all", name: "全部", active: true },
@@ -41,20 +39,6 @@ export default function UserContentTabs() {
                 ))}
               </div>
 
-              {/* Search Bar */}
-              <div className="p-4 border-b border-gray-200">
-                <div className="relative">
-                  <Input
-                    type="text"
-                    placeholder="搜索内容..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pr-10"
-                  />
-                  <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                </div>
-              </div>
-
               {/* Content */}
               <div className="p-6">
                 <div className="text-center py-12">
@@ -68,35 +52,6 @@ export default function UserContentTabs() {
                     </svg>
                   </div>
                   <p className="text-gray-500">暂无内容</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Sidebar */}
-          <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">个人动态</h3>
-              <div className="space-y-4">
-                <div className="border-b border-gray-200 pb-4">
-                  <div className="flex items-start space-x-3">
-                    <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center flex-shrink-0">
-                      <span className="text-xs font-bold">Z</span>
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center space-x-2 text-sm text-gray-500 mb-1">
-                        <span className="font-medium text-gray-900">ztkk</span>
-                        <span>昨天16:39</span>
-                      </div>
-                      <p className="text-gray-900 mb-2">啊啊啊啊啊</p>
-                      <div className="flex items-center space-x-4 text-sm text-gray-500">
-                        <button className="hover:text-gray-700">分享</button>
-                        <button className="hover:text-gray-700">评论</button>
-                        <button className="hover:text-gray-700">赞</button>
-                        <span className="ml-auto">237展现</span>
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>

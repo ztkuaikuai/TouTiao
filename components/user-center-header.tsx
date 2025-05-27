@@ -8,18 +8,6 @@ import { useRouter } from "next/navigation"
 import { useUser } from "@/hooks/use-user"
 import Link from "next/link"
 
-const categories = [
-  { name: "关注", href: "/" },
-  { name: "推荐", href: "/" },
-  { name: "北京", href: "/" },
-  { name: "视频", href: "/" },
-  { name: "财经", href: "/" },
-  { name: "科技", href: "/" },
-  { name: "热点", href: "/" },
-  { name: "军事", href: "/" },
-  { name: "更多", href: "/" },
-]
-
 export default function UserCenterHeader() {
   const supabase = createClient()
   const router = useRouter()
@@ -39,13 +27,6 @@ export default function UserCenterHeader() {
             <Link href="/" className="text-red-500 text-xl font-bold">
               今日头条
             </Link>
-            <nav className="hidden md:flex items-center space-x-6">
-              {categories.map((category) => (
-                <Link key={category.name} href={category.href} className="text-gray-700 hover:text-red-500 text-sm">
-                  {category.name}
-                </Link>
-              ))}
-            </nav>
           </div>
 
           {/* Right Side Actions */}
@@ -53,10 +34,6 @@ export default function UserCenterHeader() {
             <Button variant="ghost" size="sm" className="text-gray-700 hover:text-red-500">
               <Search className="w-4 h-4 mr-1" />
               搜索
-            </Button>
-            <Button variant="ghost" size="sm" className="text-gray-700 hover:text-red-500">
-              <Bell className="w-4 h-4 mr-1" />
-              消息
             </Button>
             <Button variant="ghost" size="sm" className="text-gray-700 hover:text-red-500">
               <Edit className="w-4 h-4 mr-1" />
