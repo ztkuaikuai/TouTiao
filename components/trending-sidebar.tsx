@@ -1,6 +1,10 @@
+'use client'
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Flame } from "lucide-react"
+import { useUser } from "@/hooks/use-user"
+import { useRouter } from "next/navigation"
 
 const trendingTopics = [
   { rank: 1, title: "习近平向中国西部国际博览会致贺信", isHot: true },
@@ -16,17 +20,19 @@ const trendingTopics = [
 ]
 
 export default function TrendingSidebar() {
+  const router = useRouter()
+  const [user] = useUser()
   return (
     <div className="space-y-6">
       {/* User Profile Card */}
       <Card>
         <CardContent className="p-4">
           <div className="flex items-center space-x-3 mb-4">
-            <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center  cursor-pointer">
-              <span className="text-lg font-bold">筷</span>
+            <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center  cursor-pointer" onClick={() => router.push('/user-center')}>
+              <span className="text-lg font-bold">{user?.email?.slice(0, 1)}</span>
             </div>
-            <div className="flex gap-1 items-center  cursor-pointer">
-              <h3 className="font-medium">筷筷</h3>
+            <div className="flex gap-1 items-center  cursor-pointer" onClick={() => router.push('/user-center')}>
+              <h3 className="font-medium">{user?.email?.split('@')[0]}</h3>
               <p className="text-sm text-gray-500">&gt;</p>
             </div>
           </div>

@@ -1,13 +1,25 @@
 "use client"
 
-import { useState } from "react"
-import { Search, Bell, Edit, User } from "lucide-react"
+import { useEffect, useState } from "react"
+import { Search, Edit, User } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { createClient } from "@/utils/supabase/client"
+import { useRouter } from "next/navigation"
+import { useUser } from "@/hooks/use-user"
 
 export default function Header() {
   const [searchQuery, setSearchQuery] = useState("")
+
+  const supabase = createClient()
+  const router = useRouter()
+  const signout = async () => {
+    await supabase.auth.signOut()
+    router.replace('/login')
+  }
+  
+  const [user] = useUser()
 
   return (
     <header className="relative">
@@ -27,10 +39,6 @@ export default function Header() {
           </div>
           <div className="flex items-center space-x-4">
             <Button variant="ghost" size="sm" className="text-white hover:bg-gray-800 hover:text-white">
-              <Bell className="w-4 h-4 mr-1" />
-              消息
-            </Button>
-            <Button variant="ghost" size="sm" className="text-white hover:bg-gray-800 hover:text-white">
               <Edit className="w-4 h-4 mr-1" />
               发布作品
             </Button>
@@ -38,12 +46,12 @@ export default function Header() {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="sm" className="text-white hover:bg-gray-800 hover:text-white">
                   <User className="w-4 h-4 mr-1" />
-                  筷筷
+                  {user?.email?.split('@')[0]}
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuItem>个人中心</DropdownMenuItem>
-                <DropdownMenuItem>退出登录</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => router.push('/user-center')}>个人中心</DropdownMenuItem>
+                <DropdownMenuItem onClick={signout}>退出登录</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>

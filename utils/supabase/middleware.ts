@@ -48,6 +48,8 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url)
   }
 
+  console.log('user', user)
+
   // IMPORTANT: You *must* return the supabaseResponse object as it is.
   // If you're creating a new response object with NextResponse.next() make sure to:
   // 1. Pass the request in it, like so:
