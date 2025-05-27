@@ -1,9 +1,13 @@
-import React from 'react'
+import UserCenterHeader from "@/components/user-center-header"
+import UserProfileSection from "@/components/user-profile-section"
+import UserContentTabs from "@/components/user-content-tabs"
 
-const UserCenter = () => {
+export default function UserCenterPage() {
   return (
-    <div>UserCenter</div>
+    <div className="min-h-screen bg-gray-50">
+      <UserCenterHeader />
+      <UserProfileSection />
+      <UserContentTabs />
+    </div>
   )
 }
-
-export default UserCenter

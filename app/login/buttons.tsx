@@ -23,5 +23,4 @@ export function SignupButton() {
       注册
     </Button>
   )
-}   
-
+}
