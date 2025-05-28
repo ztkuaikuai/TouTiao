@@ -30,8 +30,12 @@ export default function TrendingSidebar() {
       <Card>
         <CardContent className="p-4">
           <div className="flex items-center space-x-3 mb-4">
-            <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center  cursor-pointer" onClick={() => router.push('/user-center')}>
-              <span className="text-lg font-bold">{profile?.name?.slice(0, 1)}</span>
+            <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center cursor-pointer overflow-hidden" onClick={() => router.push('/user-center')}>
+              {profile?.avatar_url ? (
+                <img src={profile.avatar_url} alt="User avatar" className="w-full h-full object-cover" />
+              ) : (
+                <span className="text-lg font-bold">{profile?.name?.slice(0, 1)}</span>
+              )}
             </div>
             <div className="flex gap-1 items-center  cursor-pointer" onClick={() => router.push('/user-center')}>
               <h3 className="font-medium">{profile?.name}</h3>

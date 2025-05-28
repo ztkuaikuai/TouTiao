@@ -16,7 +16,6 @@ export function useUser(): [User | null] {
 
         // Subscribe to auth state changes
         const { data: authListener } = supabase.auth.onAuthStateChange((event, session: Session | null) => {
-            console.log('Auth event:', event, 'Session:', session)
             if (session && (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED' || event === 'USER_UPDATED')) {
                 setUser(session.user)
             } else if (event === 'SIGNED_OUT') {

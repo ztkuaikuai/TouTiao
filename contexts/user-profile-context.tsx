@@ -20,6 +20,7 @@ interface UserProfileContextType {
   updateProfileName: (newName: string) => Promise<{ success: boolean; error?: any }>;
   // 如果需要，可以添加一个 refetchProfile 函数
   // refetchProfile: () => Promise<void>;
+  updateProfileAvatar: (newAvatarUrl: string) => Promise<{ success: boolean; error?: any }>;
 }
 
 const UserProfileContext = createContext<UserProfileContextType | undefined>(undefined);
@@ -114,11 +115,41 @@ export const UserProfileProvider: React.FC<{ children: ReactNode }> = ({ childre
     }
   };
   
-  // Optional: refetchProfile function if needed later
-  // const refetchProfile = async () => { ... same logic as in useEffect ... }
+  const updateProfileAvatar = async (newAvatarUrl: string): Promise<{ success: boolean; error?: any }> => {
+    if (!authUser || !authUser.id || !profile || !newAvatarUrl.trim()) {
+      return { success: false, error: new Error("User not authenticated, profile not loaded, or new avatar URL is empty.") };
+    }
+    if (newAvatarUrl.trim() === profile.avatar_url) {
+      return { success: true }; // No change needed
+    }
+
+    setLoadingProfile(true); // Indicate loading state for profile update
+    try {
+      const { data: updatedProfile, error } = await supabase
+        .from('user-profiles')
+        .update({ avatar_url: newAvatarUrl.trim() })
+        .eq('user_id', authUser.id)
+        .select()
+        .single();
+
+      if (error) {
+        console.error('Error updating avatar_url in context:', error.message);
+        return { success: false, error };
+      } else if (updatedProfile) {
+        setProfile(updatedProfile as UserProfile);
+        return { success: true };
+      }
+      return { success: false, error: new Error("Update did not return a profile.") }; // Should not happen
+    } catch (error) {
+      console.error('Unexpected error updating avatar_url in context:', error);
+      return { success: false, error };
+    } finally {
+      setLoadingProfile(false);
+    }
+  };
 
   return (
-    <UserProfileContext.Provider value={{ profile, loadingProfile, updateProfileName }}>
+    <UserProfileContext.Provider value={{ profile, loadingProfile, updateProfileName, updateProfileAvatar }}>
       {children}
     </UserProfileContext.Provider>
   );
