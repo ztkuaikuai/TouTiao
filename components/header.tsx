@@ -7,9 +7,10 @@ import { Input } from "@/components/ui/input"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { createClient } from "@/utils/supabase/client"
 import { useRouter } from "next/navigation"
-import { useUser } from "@/hooks/use-user"
+import { useUserProfile } from "@/contexts/user-profile-context"
 
 export default function Header() {
+  const { profile } = useUserProfile()
   const [searchQuery, setSearchQuery] = useState("")
 
   const supabase = createClient()
@@ -18,8 +19,6 @@ export default function Header() {
     await supabase.auth.signOut()
     router.replace('/login')
   }
-  
-  const [user] = useUser()
 
   return (
     <header className="relative">
@@ -46,7 +45,7 @@ export default function Header() {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="sm" className="text-white hover:bg-gray-800 hover:text-white">
                   <User className="w-4 h-4 mr-1" />
-                  {user?.email?.split('@')[0]}
+                  {profile?.name}
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>

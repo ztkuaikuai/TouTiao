@@ -5,13 +5,13 @@ import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { createClient } from "@/utils/supabase/client"
 import { useRouter } from "next/navigation"
-import { useUser } from "@/hooks/use-user"
+import { useUserProfile } from "@/contexts/user-profile-context"
 import Link from "next/link"
 
 export default function UserCenterHeader() {
   const supabase = createClient()
   const router = useRouter()
-  const [user] = useUser()
+  const { profile } = useUserProfile()
 
   const signout = async () => {
     await supabase.auth.signOut()
@@ -43,7 +43,7 @@ export default function UserCenterHeader() {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="sm" className="text-gray-700 hover:text-red-500">
                   <User className="w-4 h-4 mr-1" />
-                  {user?.email?.split("@")[0]}
+                  {profile?.name}
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
