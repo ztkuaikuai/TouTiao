@@ -7,9 +7,11 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Search } from "lucide-react"
 import { useState } from "react"
+import { useRouter } from 'next/navigation'
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState("")
+  const router = useRouter()
   return (<>
     {/* Main Header with Background */}
     <div className="relative">
@@ -37,10 +39,15 @@ export default function Home() {
               placeholder="AI 智能搜索"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  router.push(`/search?keyword=${encodeURIComponent(searchQuery.trim())}`)
+                }
+              }}
               className="w-full h-12 pl-4 pr-12 text-lg bg-white rounded-full border-0 focus:ring-2 focus:ring-red-500"
             />
-            <Button size="sm" className="absolute right-2 top-2 bg-red-500 hover:bg-red-600 rounded-full w-8 h-8 p-0">
-              <Search className="w-4 h-4 text-white" />
+            <Button size="sm" className="absolute right-2 top-2 bg-red-500 hover:bg-red-600 rounded-full w-8 h-8 p-0" onClick={() => router.push(`/search?keyword=${encodeURIComponent(searchQuery.trim())}`)}>
+              <Search className="w-4 h-4 text-white"/>
             </Button>
           </div>
         </div>
