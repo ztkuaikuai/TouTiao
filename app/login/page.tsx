@@ -22,7 +22,6 @@ function LoginContent() {
 
   useEffect(() => {
     const message = searchParams.get('message');
-    console.log('message', message)
     if (message) {
       toast({
         description: message,

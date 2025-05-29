@@ -1,7 +1,7 @@
 'use client'
 
 import { useSearchParams } from 'next/navigation'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import NewsFeed from "@/components/news-feed"
 import TrendingSidebar from "@/components/trending-sidebar"
 import { Input } from "@/components/ui/input"
@@ -11,13 +11,17 @@ import { useRouter } from 'next/navigation'
 import CozeResponse from '../../components/coze-response'
 import { useUserProfile } from "@/contexts/user-profile-context"
 
-export default function SearchPage() {
+function SearchContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const { profile } = useUserProfile()
   const keyword = searchParams.get('keyword') || ''
   const [searchQuery, setSearchQuery] = useState(keyword)
   const userId = profile?.user_id ? String(profile.user_id) : 'anonymous'
+
+  useEffect(() => {
+    setSearchQuery(keyword);
+  }, [keyword]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
@@ -79,5 +83,13 @@ export default function SearchPage() {
         </div>
       </div>
     </main>
+  )
+}
+
+export default function SearchPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SearchContent />
+    </Suspense>
   )
 }   
