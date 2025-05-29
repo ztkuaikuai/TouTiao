@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { Card, CardContent } from "@/components/ui/card"
 import { Bot } from 'lucide-react'
 import { Button } from './ui/button'
+import ReactMarkdown from 'react-markdown'
 
 interface CozeResponseProps {
   keyword: string
@@ -149,7 +150,18 @@ export default function CozeResponse({ keyword, userId }: CozeResponseProps) {
                 <div className="w-2 h-2 bg-red-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
               </div>
             ) : (
-              <div className="text-gray-700 whitespace-pre-wrap">{response}</div>
+              <div className="prose dark:prose-invert max-w-none">
+                <ReactMarkdown
+                  components={{
+                    p: ({node, ...props}) => <p className="text-gray-700 whitespace-pre-wrap" {...props} />,
+                    a: ({node, ...props}) => <a className="underline" target='_blank' {...props} />,
+                    // 在此为其他 markdown 元素添加自定义渲染器，如果需要的话
+                    // 例如：h1, h2, code, blockquote 等
+                  }}
+                >
+                  {response}
+                </ReactMarkdown>
+              </div>
             )}
           </div>
         </div>
