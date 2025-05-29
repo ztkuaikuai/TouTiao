@@ -1,17 +1,15 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { Search, Edit, User } from "lucide-react"
+import { Edit, User } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { createClient } from "@/utils/supabase/client"
 import { useRouter } from "next/navigation"
 import { useUserProfile } from "@/contexts/user-profile-context"
+import Link from "next/link"
 
 export default function Header() {
   const { profile } = useUserProfile()
-  const [searchQuery, setSearchQuery] = useState("")
 
   const supabase = createClient()
   const router = useRouter()
@@ -24,8 +22,14 @@ export default function Header() {
     <header className="relative">
       {/* Top Navigation Bar */}
       <div className="bg-gray-900 text-white text-sm">
-        <div className="max-w-7xl mx-auto px-4 py-2 flex justify-between items-center">
-          <div className="flex items-center space-x-6">
+        <div className="max-w-7xl mx-auto px-4 py-2 flex justify-end sm:justify-between items-center">
+          <div className="hidden sm:flex items-center space-x-6">
+            {/* Logo and Navigation */}
+            <div className="flex items-center space-x-8">
+              <Link href="/" className="text-red-500 text-xl font-bold">
+                今日头条
+              </Link>
+            </div>
             <a href="#" className="hover:text-gray-300">
               关于头条
             </a>
@@ -53,40 +57,6 @@ export default function Header() {
                 <DropdownMenuItem onClick={signout}>退出登录</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Header with Background */}
-      <div className="relative h-[20rem]">
-        {/* 视频背景层 */}
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover"
-        >
-          <source src="https://lf9-static.bytednsdoc.com/obj/eden-cn/uhbfnupkbps/video/earth_v6.mp4" type="video/mp4" />
-        </video>
-
-        {/* 遮罩层 */}
-        <div className="absolute inset-0 bg-black bg-opacity-40" />
-
-        {/* 内容层 */}
-        <div className="relative z-10 max-w-7xl mx-auto px-4 py-8 flex flex-col items-center justify-center h-full">
-          <h1 className="text-white text-5xl font-bold mb-8">今日头条</h1>
-          <div className="relative w-full max-w-2xl">
-            <Input
-              type="text"
-              placeholder="鼓励带薪年假与代休并举体"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full h-12 pl-4 pr-12 text-lg bg-white rounded-full border-0 focus:ring-2 focus:ring-red-500"
-            />
-            <Button size="sm" className="absolute right-2 top-2 bg-red-500 hover:bg-red-600 rounded-full w-8 h-8 p-0">
-              <Search className="w-4 h-4 text-white" />
-            </Button>
           </div>
         </div>
       </div>

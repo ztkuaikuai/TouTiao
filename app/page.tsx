@@ -1,64 +1,67 @@
-import Header from "@/components/header"
+'use client'
+
 import NewsFeed from "@/components/news-feed"
 import TrendingSidebar from "@/components/trending-sidebar"
 import FloatingActionButtons from "@/components/floating-action-buttons"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { Search } from "lucide-react"
+import { useState } from "react"
 
 export default function Home() {
-  return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
+  const [searchQuery, setSearchQuery] = useState("")
+  return (<>
+    {/* Main Header with Background */}
+    <div className="relative">
+      <div className="relative h-[20rem]">
+        {/* 视频背景层 */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+        >
+          <source src="https://lf9-static.bytednsdoc.com/obj/eden-cn/uhbfnupkbps/video/earth_v6.mp4" type="video/mp4" />
+        </video>
 
-      <main className="max-w-7xl mx-auto px-4 py-6">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          {/* Main Content */}
-          <div className="lg:col-span-3">
-            <NewsFeed />
-          </div>
+        {/* 遮罩层 */}
+        <div className="absolute inset-0 bg-black bg-opacity-40" />
 
-          {/* Sidebar */}
-          <div className="lg:col-span-1">
-            <TrendingSidebar />
-          </div>
-        </div>
-      </main>
-
-      {/* Footer */}
-      <footer className="bg-white border-t border-gray-200 mt-12">
-        <div className="max-w-7xl mx-auto px-4 py-8">
-          <div className="grid grid-cols-2 md:grid-cols-6 gap-4 text-sm text-gray-600">
-            <a href="#" className="hover:text-gray-900">
-              加入头条
-            </a>
-            <a href="#" className="hover:text-gray-900">
-              用户协议
-            </a>
-            <a href="#" className="hover:text-gray-300">
-              隐私政策
-            </a>
-            <a href="#" className="hover:text-gray-900">
-              媒体合作
-            </a>
-            <a href="#" className="hover:text-gray-900">
-              广告合作
-            </a>
-            <a href="#" className="hover:text-gray-900">
-              友情链接
-            </a>
-            <a href="#" className="hover:text-gray-900">
-              更多
-            </a>
-            <a href="#" className="hover:text-gray-900">
-              下载今日头条APP
-            </a>
-          </div>
-          <div className="mt-6 pt-6 border-t border-gray-200 text-xs text-gray-500">
-            <p>北京科技有限公司版权所有 违法和不良信息举报：400-140-2108 举报邮箱：jubao@toutiao.com</p>
+        {/* 内容层 */}
+        <div className="relative z-10 max-w-7xl mx-auto px-4 py-8 flex flex-col items-center justify-center h-full">
+          <h1 className="text-white text-5xl font-bold mb-8">今日头条</h1>
+          <div className="relative w-full max-w-2xl">
+            <Input
+              type="text"
+              placeholder="AI 智能搜索"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full h-12 pl-4 pr-12 text-lg bg-white rounded-full border-0 focus:ring-2 focus:ring-red-500"
+            />
+            <Button size="sm" className="absolute right-2 top-2 bg-red-500 hover:bg-red-600 rounded-full w-8 h-8 p-0">
+              <Search className="w-4 h-4 text-white" />
+            </Button>
           </div>
         </div>
-      </footer>
-
-      {/* Floating Action Buttons */}
-      <FloatingActionButtons />
+      </div>
     </div>
-  )
+
+    <main className="max-w-7xl mx-auto px-4 py-6">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        {/* Main Content */}
+        <div className="lg:col-span-3">
+          <NewsFeed />
+        </div>
+
+        {/* Sidebar */}
+        <div className="lg:col-span-1">
+          <TrendingSidebar />
+        </div>
+      </div>
+    </main>
+
+    {/* Floating Action Buttons */}
+    <FloatingActionButtons />
+  </>)
 }

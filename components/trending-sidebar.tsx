@@ -3,21 +3,20 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Flame } from "lucide-react"
-import { useUser } from "@/hooks/use-user"
 import { useRouter } from "next/navigation"
 import { useUserProfile } from "@/contexts/user-profile-context"
 
 const trendingTopics = [
   { rank: 1, title: "习近平向中国西部国际博览会致贺信", isHot: true },
-  { rank: 2, title: "男子拿女儿水枪抢老爱后院钢丝女儿", isNew: true },
+  { rank: 2, title: "国台办回应台湾黑客网攻", isNew: true },
   { rank: 3, title: "300多万元错误征收补偿区189万" },
   { rank: 4, title: '中国经济率先"顶住了压力"' },
   { rank: 5, title: "副部级刘灵芝被查" },
   { rank: 6, title: "85后干部被严重警告两年后执掌提拔" },
-  { rank: 7, title: "网警重拳出击堵塞一网络水军团伙" },
+  { rank: 7, title: "网警重拳出击堵塞网络水军团伙" },
   { rank: 8, title: "雨果：王廷芝是现实版世界最佳", isNew: true },
   { rank: 9, title: "英教学员被害无人机空战" },
-  { rank: 10, title: "重庆菜园坝火车站将客", isHot: true },
+  { rank: 10, title: "重庆菜园坝火车站将…", isHot: true },
 ]
 
 export default function TrendingSidebar() {
