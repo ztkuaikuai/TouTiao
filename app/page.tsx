@@ -36,7 +36,7 @@ export default function Home() {
           <div className="relative w-full max-w-2xl">
             <Input
               type="text"
-              placeholder="AI 智能搜索"
+              placeholder="搜索你感兴趣的内容"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={(e) => {

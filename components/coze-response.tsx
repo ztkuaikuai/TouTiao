@@ -11,7 +11,6 @@ interface CozeResponseProps {
 }
 
 export default function CozeResponse({ keyword, userId }: CozeResponseProps) {
-  console.log('keyword', keyword, userId)
   const [response, setResponse] = useState<string>('')
   const [loading, setLoading] = useState(false)
   const abortControllerRef = useRef<AbortController | null>(null);

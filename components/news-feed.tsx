@@ -1,24 +1,55 @@
 "use client"
 
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import NewsCard from "./news-card"
 import type { Article } from "@/app/api/articles/route"
 import { useEffect, useState } from "react"
 import { Skeleton } from "@/components/ui/skeleton"
 
-export default function NewsFeed() {
+interface NewsFeedProps {
+  from?: 'index' | 'search'
+}
+
+export default function NewsFeed({ from = 'index' }: NewsFeedProps) {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const keyword = searchParams.get('keyword') || ''
   const [newsData, setNewsData] = useState<Article[]>([])
+  const [loading, setLoading] = useState(true)
+
   useEffect(() => {
     const fetchNewsData = async () => {
-      const response = await fetch("/api/articles")
-      const data = await response.json()
-      setNewsData(data)
+      setLoading(true)
+      try {
+        let response;
+        
+        if (from === 'index') {
+          response = await fetch("/api/articles")
+        } else if (from === 'search' && keyword) {
+          response = await fetch(`/api/keyword-articles?keyword=${encodeURIComponent(keyword)}`)
+        } else {
+          response = await fetch("/api/articles")
+        }
+        const data = await response.json()
+        
+        // 处理不同接口返回的数据结构
+        if (from === 'search' && data.articles) {
+          setNewsData(data.articles)
+        } else {
+          setNewsData(data)
+        }
+      } catch (error) {
+        console.error('获取新闻数据失败:', error)
+        setNewsData([])
+      } finally {
+        setLoading(false)
+      }
     }
     fetchNewsData()
-  }, [])
+  }, [from, keyword])
+
   return (<>
-    {newsData.length > 0 ? (
+    {!loading && newsData.length > 0 ? (
       <div className="space-y-4">
         {newsData.map((news, index) => (
           <NewsCard
@@ -35,6 +66,10 @@ export default function NewsFeed() {
             }}
           />
         ))}
+      </div>
+    ) : !loading && newsData.length === 0 ? (
+      <div className="text-center py-8">
+        <p className="text-gray-500">{from === 'search' ? '没有找到相关文章' : '暂无文章'}</p>
       </div>
     ) : (
       <div className="space-y-4">

@@ -67,7 +67,7 @@ function SearchContent() {
                 userId={userId}
               />
               <div className="mt-6">
-                <NewsFeed />
+                <NewsFeed from="search"/>
               </div>
             </>
           ) : (
