@@ -41,11 +41,7 @@ export default function TrendingSidebar() {
               <p className="text-sm text-gray-500">&gt;</p>
             </div>
           </div>
-          <div className="grid grid-cols-3 gap-4 text-center">
-            <div>
-              <div className="text-xl font-bold">0</div>
-              <div className="text-sm text-gray-500">获赞</div>
-            </div>
+          <div className="grid grid-cols-2 gap-4 text-center">
             <div>
               <div className="text-xl font-bold">0</div>
               <div className="text-sm text-gray-500">粉丝</div>

@@ -187,10 +187,6 @@ export default function UserProfileSection() {
               <div className="flex items-center space-x-8 mb-4">
                 <div className="text-center">
                   <div className="text-xl font-bold text-gray-900">0</div>
-                  <div className="text-sm text-gray-500">获赞</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-xl font-bold text-gray-900">0</div>
                   <div className="text-sm text-gray-500">粉丝</div>
                 </div>
                 <div className="text-center">

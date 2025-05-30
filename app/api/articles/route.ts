@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { createClient } from '@/utils/supabase/server'
 
 // 定义文章类型 (基于图片中的表结构)
-interface Article {
+export interface Article {
   id?: number
   title: string
   content: string
@@ -12,6 +12,11 @@ interface Article {
   favorites_count?: number
   views_count?: number
   comments_count?: number
+  author?: {
+    user_id: string
+    name: string
+    avatar_url: string
+  }
 }
 
 export async function GET(request: NextRequest) {
@@ -20,10 +25,13 @@ export async function GET(request: NextRequest) {
   const id = searchParams.get('id')
 
   if (id) {
-    // 获取单篇文章
+    // 获取单篇文章，包括作者信息
     const { data, error } = await supabase
       .from('articles')
-      .select('*')
+      .select(`
+        *,
+        author:user-profiles!author_id(user_id, name, avatar_url)
+      `)
       .eq('id', id)
       .single()
 
@@ -33,12 +41,16 @@ export async function GET(request: NextRequest) {
     if (!data) {
       return NextResponse.json({ error: 'Article not found' }, { status: 404 })
     }
+    console.log('article:GET',data)
     return NextResponse.json(data)
   } else {
-    // 获取文章列表 (可以添加分页等逻辑)
+    // 获取文章列表，包括作者信息
     const { data, error } = await supabase
       .from('articles')
-      .select('*')
+      .select(`
+        *,
+        author:user-profiles!author_id(user_id, name, avatar_url)
+      `)
       .order('created_at', { ascending: false }) // 按创建时间降序
 
     if (error) {

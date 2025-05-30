@@ -9,7 +9,7 @@ const tabs = [
 ]
 
 export default function UserContentTabs() {
-  const [activeTab, setActiveTab] = useState("all")
+  const [activeTab, setActiveTab] = useState("articles")
   const [searchQuery, setSearchQuery] = useState("")
 
   return (
