@@ -1,94 +1,60 @@
-import NewsCard from "./news-card"
+"use client"
 
-const newsData = [
-  {
-    title: "习近平向中国西部国际博览会致贺信",
-    source: "新华社",
-    time: "2025.05.25 星期日",
-    category: "今日",
-    comments: 128,
-    views: 5420,
-  },
-  {
-    title: "这件事 习近平很早就要求从娃娃抓起",
-    summary: '从"劳观者"到"闯中人"',
-    source: "人民日报",
-    time: "22分钟",
-    comments: 89,
-    views: 3210,
-  },
-  {
-    title: 'Ah181岁老人和她19岁的司马"重逢"',
-    source: "央视新闻",
-    time: "1小时前",
-    image: "/placeholder.svg?height=96&width=128",
-    comments: 256,
-    views: 8930,
-  },
-  {
-    title: '文博会观察：中国非遗产品"圈粉"海内外',
-    source: "中新网",
-    time: "2小时前",
-    comments: 45,
-    views: 1820,
-  },
-  {
-    title: "新冠又抬头 该怎样应对？钟南山给出三点建议",
-    summary: "个人信息防护建议！我国培推广应用家庭网络健身优证公共服务",
-    source: "大众新闻半岛都市报",
-    time: "前天18:31",
-    image: "/placeholder.svg?height=96&width=128",
-    comments: 342,
-    views: 12450,
-  },
-  {
-    title: "美国政府高校调查难查金分收征，矛头直指情报大学",
-    source: "广州日报",
-    time: "20小时前",
-    image: "/placeholder.svg?height=96&width=128",
-    comments: 178,
-    views: 6780,
-  },
-  {
-    title: "不懂不说，持朗者来源了",
-    source: "牛弹琴",
-    time: "372评论",
-    image: "/placeholder.svg?height=96&width=128",
-    isVideo: true,
-    duration: "06:36",
-    comments: 372,
-    views: 15620,
-  },
-  {
-    title: "听听美国国会，是怎么讨论我们的",
-    source: "客观茶室",
-    time: "658评论",
-    image: "/placeholder.svg?height=96&width=128",
-    isVideo: true,
-    duration: "04:44",
-    comments: 658,
-    views: 22340,
-  },
-]
+import { useRouter } from "next/navigation"
+import NewsCard from "./news-card"
+import type { Article } from "@/app/api/articles/route"
+import { useEffect, useState } from "react"
+import { Skeleton } from "@/components/ui/skeleton"
 
 export default function NewsFeed() {
-  return (
-    <div className="space-y-4">
-      {newsData.map((news, index) => (
-        <NewsCard
-          key={index}
-          title={news.title}
-          summary={news.summary}
-          image={news.image}
-          source={news.source}
-          time={news.time}
-          comments={news.comments}
-          views={news.views}
-          isVideo={news.isVideo}
-          duration={news.duration}
-          category={news.category}
-        />
-      ))}
-    </div>
-  )
+  const router = useRouter()
+  const [newsData, setNewsData] = useState<Article[]>([])
+  useEffect(() => {
+    const fetchNewsData = async () => {
+      const response = await fetch("/api/articles")
+      const data = await response.json()
+      setNewsData(data)
+    }
+    fetchNewsData()
+  }, [])
+  return (<>
+    {newsData.length > 0 ? (
+      <div className="space-y-4">
+        {newsData.map((news, index) => (
+          <NewsCard
+            key={index}
+            id={news.id!}
+            title={news.title}
+            author={news.author!}
+            created_at={news.created_at!}
+            likes_count={news.likes_count!}
+            favorites_count={news.favorites_count!}
+            comments_count={news.comments_count!}
+            onClick={() => {
+              router.push(`/articles/${news.id}`)
+            }}
+          />
+        ))}
+      </div>
+    ) : (
+      <div className="space-y-4">
+        {[...Array(4)].map((_, i) => (
+          <div key={i} className="p-4 bg-white rounded-md shadow flex space-x-4">
+            <div className="flex-1 space-y-3">
+              <div className="flex items-center space-x-2 mb-2">
+                <Skeleton className="h-4 w-16" />
+                <Skeleton className="h-4 w-20" />
+              </div>
+              <Skeleton className="h-6 w-3/4 mb-2" />
+              <div className="flex items-center space-x-4">
+                <Skeleton className="h-4 w-10" />
+                <Skeleton className="h-4 w-10" />
+                <Skeleton className="h-4 w-10" />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    )}
+  </>)
 }

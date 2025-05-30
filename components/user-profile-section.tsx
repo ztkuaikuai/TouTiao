@@ -5,36 +5,66 @@ import { useUser } from "@/hooks/use-user";
 import { useUserProfile } from "@/contexts/user-profile-context";
 import { ChevronRight, Edit3, Save, X, Camera } from "lucide-react";
 import { createClient } from "@/utils/supabase/client";
+import { useParams } from "next/navigation";
 
 export default function UserProfileSection() {
+  const params = useParams();
+  const userIdFromParams = params?.['user-id'] as string | undefined;
+
   const [authUser] = useUser();
   const { profile, loadingProfile, updateProfileName, updateProfileAvatar } = useUserProfile();
   const supabase = createClient();
   const avatarInputRef = useRef<HTMLInputElement>(null);
+
+  // 新增：用于存储通过 user-id 查询到的 profile
+  const [externalProfile, setExternalProfile] = useState<any>(null);
+  const [loadingExternalProfile, setLoadingExternalProfile] = useState(false);
 
   const [isEditingName, setIsEditingName] = useState(false);
   const [newName, setNewName] = useState("");
   const [nameUpdateLoading, setNameUpdateLoading] = useState(false);
   const [avatarUploading, setAvatarUploading] = useState(false);
 
+  // 通过 user-id 查询外部用户 profile
   useEffect(() => {
-    if (profile?.name) {
+    if (userIdFromParams) {
+      setLoadingExternalProfile(true);
+      supabase
+        .from('user-profiles')
+        .select('*')
+        .eq('user_id', userIdFromParams)
+        .single()
+        .then(({ data, error }) => {
+          setExternalProfile(data || null);
+          setLoadingExternalProfile(false);
+        });
+    } else {
+      setExternalProfile(null);
+    }
+  }, [userIdFromParams]);
+
+  // 姓名编辑逻辑，兼容外部 profile
+  useEffect(() => {
+    if (userIdFromParams) {
+      setNewName(externalProfile?.name || "");
+    } else if (profile?.name) {
       setNewName(profile.name);
     }
-  }, [profile?.name]);
+  }, [profile?.name, externalProfile?.name, userIdFromParams]);
 
   const handleEditName = () => {
     setIsEditingName(true);
-    setNewName(profile?.name || "");
+    setNewName(userIdFromParams ? (externalProfile?.name || "") : (profile?.name || ""));
   };
 
   const handleCancelEditName = () => {
     setIsEditingName(false);
-    if (profile?.name) setNewName(profile.name);
+    setNewName(userIdFromParams ? (externalProfile?.name || "") : (profile?.name || ""));
   };
 
+  // 仅允许当前用户编辑自己的信息
   const handleSaveName = async () => {
-    if (!authUser || !profile || !newName.trim() || newName.trim() === profile.name) {
+    if (userIdFromParams || !authUser || !profile || !newName.trim() || newName.trim() === profile.name) {
       setIsEditingName(false);
       return;
     }
@@ -50,8 +80,9 @@ export default function UserProfileSection() {
     }
   };
 
+  // 仅允许当前用户编辑自己的头像
   const handleAvatarClick = () => {
-    if (avatarUploading) return;
+    if (avatarUploading || userIdFromParams) return;
     avatarInputRef.current?.click();
   };
 
@@ -103,16 +134,71 @@ export default function UserProfileSection() {
     }
   };
 
-  if (loadingProfile && authUser) {
+  // 加载中
+  if ((userIdFromParams && loadingExternalProfile) || (!userIdFromParams && loadingProfile && authUser)) {
     return (
       <div className="bg-white">
         <div className="max-w-7xl mx-auto px-4 py-8 text-center text-gray-600">
-          正在加载您的个人信息...
+          正在加载用户信息...
         </div>
       </div>
     );
   }
 
+  // 未找到用户
+  if (userIdFromParams && !loadingExternalProfile && !externalProfile) {
+    return (
+      <div className="bg-white">
+        <div className="max-w-7xl mx-auto px-4 py-8 text-center text-gray-600">
+          未找到该用户。
+        </div>
+      </div>
+    );
+  }
+
+  // 展示外部用户信息
+  if (userIdFromParams && externalProfile) {
+    return (
+      <div className="bg-white">
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          <div className="flex items-start space-x-6">
+            {/* Avatar */}
+            <div className="relative w-24 h-24 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
+              <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center overflow-hidden relative">
+                {externalProfile.avatar_url ? (
+                  <img src={externalProfile.avatar_url} alt="User avatar" className="w-full h-full object-cover" />
+                ) : (
+                  <div className="text-4xl">🐧</div>
+                )}
+              </div>
+            </div>
+            {/* User Info */}
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-4">
+                <h1 className="text-2xl font-bold text-gray-900">{externalProfile.name || '用户'}</h1>
+              </div>
+              <div className="flex items-center space-x-8 mb-4">
+                <div className="text-center">
+                  <div className="text-xl font-bold text-gray-900">0</div>
+                  <div className="text-sm text-gray-500">粉丝</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-xl font-bold text-gray-900">0</div>
+                  <div className="text-sm text-gray-500">关注</div>
+                </div>
+              </div>
+              <button className="flex items-center text-gray-500 hover:text-gray-700 text-sm">
+                更多信息
+                <ChevronRight className="w-4 h-4 ml-1" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // 展示当前登录用户信息
   return (
     <div className="bg-white">
       <div className="max-w-7xl mx-auto px-4 py-8">

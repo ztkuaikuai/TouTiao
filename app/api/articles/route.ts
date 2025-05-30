@@ -41,7 +41,6 @@ export async function GET(request: NextRequest) {
     if (!data) {
       return NextResponse.json({ error: 'Article not found' }, { status: 404 })
     }
-    console.log('article:GET',data)
     return NextResponse.json(data)
   } else {
     // 获取文章列表，包括作者信息

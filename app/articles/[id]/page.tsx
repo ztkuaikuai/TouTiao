@@ -6,8 +6,9 @@ import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css'; // Import Quill styles
 import { Router } from 'lucide-react';
 import { Article } from '@/app/api/articles/route';
+import { Skeleton } from '@/components/ui/skeleton'
 
-const formatDate = (dateString: string) => {
+export const formatDate = (dateString: string) => {
   if (!dateString) return '';
   try {
     const date = new Date(dateString);
@@ -39,15 +40,15 @@ export default function ArticlePage() {
           if (!response.ok) {
             let errorText = `HTTP error! status: ${response.status}`;
             try {
-                const errorData = await response.json();
-                errorText = errorData.error || errorText;
+              const errorData = await response.json();
+              errorText = errorData.error || errorText;
             } catch (e) {
-                // Ignore if response is not JSON
+              // Ignore if response is not JSON
             }
             throw new Error(errorText);
           }
           const data = await response.json()
-          
+
           setArticle({
             ...data
           });
@@ -59,13 +60,46 @@ export default function ArticlePage() {
       }
       fetchArticle()
     } else {
-        setLoading(false);
-        setError("Article ID is missing.");
+      setLoading(false);
+      setError("Article ID is missing.");
     }
   }, [articleId])
 
   if (loading) {
-    return <div className="flex justify-center items-center h-screen p-4 text-center">正在加载文章，请稍候...</div>
+    return (
+      <div className="container mx-auto px-2 sm:px-4 py-4 max-w-5xl">
+        <div className="flex flex-col lg:flex-row">
+          {/* 左侧社交栏骨架 */}
+          <div className="w-full lg:w-20 flex lg:flex-col justify-center items-center space-x-4 lg:space-x-0 lg:space-y-8 py-4 lg:py-0 lg:sticky lg:top-24 self-start order-2 lg:order-1 lg:mr-6">
+            <Skeleton className="h-12 w-12 mb-2" />
+            <Skeleton className="h-12 w-12 mb-2" />
+            <Skeleton className="h-12 w-12 mb-2" />
+          </div>
+          {/* 右侧正文骨架 */}
+          <div className="flex-1 p-2 sm:p-4 order-1 lg:order-2 min-w-0">
+            <div className="mb-6 pb-4 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <Skeleton className="w-11 h-11 rounded-full mr-3" />
+                  <div>
+                    <Skeleton className="h-5 w-24 mb-2" />
+                    <Skeleton className="h-4 w-20" />
+                  </div>
+                </div>
+                <Skeleton className="h-8 w-20 ml-2" />
+              </div>
+            </div>
+            <Skeleton className="h-8 w-2/3 mb-6" />
+            <div className="space-y-4">
+              <Skeleton className="h-6 w-full" />
+              <Skeleton className="h-6 w-5/6" />
+              <Skeleton className="h-6 w-4/6" />
+              <Skeleton className="h-6 w-3/6" />
+            </div>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   if (error) {
@@ -83,7 +117,7 @@ export default function ArticlePage() {
   return (
     <div className="container mx-auto px-2 sm:px-4 py-4 max-w-5xl"> {/* Main container */}
       <div className="flex flex-col lg:flex-row">
-        
+
         {/* Left Sidebar for social interactions */}
         {/* On small screens, this could be at the bottom or a horizontal bar */}
         {/* For now, it will stack vertically and then become a sticky sidebar on larger screens */}
@@ -107,29 +141,29 @@ export default function ArticlePage() {
           {/* Publisher/Author and Date */}
           <div className="mb-6 pb-4 border-b border-gray-200">
             <div className="flex items-center justify-between">
-                <div className="flex items-center" onClick={() => router.push(`/user-center/${article.author_id}`)}>
-                    {/* Publisher avatar or fallback */}
-                    {article.author?.avatar_url ? (
-                      <img
-                        src={article.author.avatar_url}
-                        alt={article.author.name?.substring(0,2) || '头像'}
-                        className="w-11 h-11 rounded-full object-cover mr-3 shrink-0 border border-gray-200 bg-white"
-                      />
-                    ) : (
-                      <div className="w-11 h-11 bg-red-600 text-white rounded-full mr-3 flex items-center justify-center text-sm font-semibold shrink-0">
-                        {article.author?.name?.substring(0,2) || '匿名用户'}
-                      </div>
-                    )}
-                    <div>
-                        <p className="font-semibold text-base sm:text-lg text-gray-800">{article.author?.name}</p>
-                        <p className="text-xs sm:text-sm text-gray-500 mt-0.5">
-                            {formatDate(article.created_at!)}
-                        </p>
-                    </div>
+              <div className="flex items-center cursor-pointer" onClick={() => router.push(`/user-center/${article.author_id}`)}>
+                {/* Publisher avatar or fallback */}
+                {article.author?.avatar_url ? (
+                  <img
+                    src={article.author.avatar_url}
+                    alt={article.author.name?.substring(0, 2) || '头像'}
+                    className="w-11 h-11 rounded-full object-cover mr-3 shrink-0 border border-gray-200 bg-white"
+                  />
+                ) : (
+                  <div className="w-11 h-11 bg-red-600 text-white rounded-full mr-3 flex items-center justify-center text-sm font-semibold shrink-0">
+                    {article.author?.name?.substring(0, 2) || '匿名用户'}
+                  </div>
+                )}
+                <div>
+                  <p className="font-semibold text-base sm:text-lg text-gray-800">{article.author?.name}</p>
+                  <p className="text-xs sm:text-sm text-gray-500 mt-0.5">
+                    {formatDate(article.created_at!)}
+                  </p>
                 </div>
-                <button className="bg-red-500 hover:bg-red-600 text-white px-4 py-1.5 rounded text-sm font-medium shrink-0 ml-2">
-                    + 关注
-                </button>
+              </div>
+              <button className="bg-red-500 hover:bg-red-600 text-white px-4 py-1.5 rounded text-sm font-medium shrink-0 ml-2">
+                + 关注
+              </button>
             </div>
           </div>
 

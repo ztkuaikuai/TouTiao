@@ -1,65 +1,65 @@
 import Image from "next/image"
-import { MessageCircle, Eye } from "lucide-react"
+import { MessageCircle, Heart, Star } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
+import { formatDate } from "@/app/articles/[id]/page"
 
 interface NewsCardProps {
+  id: number
   title: string
-  summary?: string
-  image?: string
-  source: string
-  time: string
-  comments?: number
-  views?: number
-  isVideo?: boolean
-  duration?: string
-  category?: string
+  author: {
+    name: string
+  }
+  created_at: string
+  likes_count: number
+  favorites_count: number
+  comments_count: number
+  onClick: () => void
 }
 
 export default function NewsCard({
+  id,
   title,
-  summary,
-  image,
-  source,
-  time,
-  comments,
-  views,
-  isVideo,
-  duration,
-  category,
+  author: {
+    name,
+  },
+  created_at,
+  likes_count,
+  favorites_count,
+  comments_count,
+  onClick,
 }: NewsCardProps) {
   return (
-    <Card className="hover:shadow-md transition-shadow cursor-pointer">
+    <Card className="hover:shadow-md transition-shadow cursor-pointer" onClick={onClick}>
       <CardContent className="p-4">
         <div className="flex space-x-4">
           <div className="flex-1">
             <div className="flex items-center space-x-2 mb-2">
-              {category && (
-                <Badge variant="destructive" className="text-xs">
-                  {category}
-                </Badge>
-              )}
-              <span className="text-sm text-gray-500">{source}</span>
-              <span className="text-sm text-gray-400">{time}</span>
+              <span className="text-sm text-gray-500">{name}</span>
+              <span className="text-sm text-gray-400">{formatDate(created_at)}</span>
             </div>
             <h3 className="text-lg font-medium text-gray-900 mb-2 line-clamp-2 hover:text-red-600">{title}</h3>
-            {summary && <p className="text-gray-600 text-sm line-clamp-2 mb-3">{summary}</p>}
             <div className="flex items-center space-x-4 text-sm text-gray-500">
-              {comments && (
+              {likes_count >= 0 && (
                 <div className="flex items-center space-x-1">
-                  <MessageCircle className="w-4 h-4" />
-                  <span>{comments}</span>
+                  <Heart className="w-4 h-4" />
+                  <span>{likes_count}</span>
                 </div>
               )}
-              {views && (
+              {comments_count >= 0 && (
                 <div className="flex items-center space-x-1">
-                  <Eye className="w-4 h-4" />
-                  <span>{views}</span>
+                  <MessageCircle className="w-4 h-4" />
+                  <span>{comments_count}</span>
+                </div>
+              )}
+              {favorites_count >= 0 && (
+                <div className="flex items-center space-x-1">
+                  <Star className="w-4 h-4" />
+                  <span>{favorites_count}</span>
                 </div>
               )}
             </div>
           </div>
-          {image && (
+          {/* {image && (
             <div className="relative w-32 h-24 flex-shrink-0">
               <Image src={image || "/placeholder.svg"} alt={title} fill className="object-cover rounded" />
               {isVideo && duration && (
@@ -68,7 +68,7 @@ export default function NewsCard({
                 </div>
               )}
             </div>
-          )}
+          )} */}
         </div>
       </CardContent>
     </Card>
