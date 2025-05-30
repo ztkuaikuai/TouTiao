@@ -4,9 +4,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 
 const tabs = [
-  { id: "all", name: "全部", active: true },
-  { id: "articles", name: "文章", active: false },
-  { id: "micro", name: "微头条", active: false },
+  { id: "articles", name: "文章", active: true },
   { id: "favorites", name: "收藏", active: false },
 ]
 

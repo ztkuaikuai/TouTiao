@@ -55,18 +55,12 @@ export default function TrendingSidebar() {
               <div className="text-sm text-gray-500">关注</div>
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-2 mt-4">
-            <div className="text-center">
-              <div className="w-8 h-8 bg-blue-100 rounded mx-auto mb-1 flex items-center justify-center">
+          <div className="grid grid-cols-1 gap-2 mt-4">
+            <div className="text-center cursor-pointer" onClick={() => router.push('/publish')}>
+              <div className="w-24 h-8 bg-blue-100 rounded mx-auto mb-1 flex items-center justify-center">
                 <span className="text-blue-600 text-xs">写</span>
               </div>
               <span className="text-xs">写文章</span>
-            </div>
-            <div className="text-center">
-              <div className="w-8 h-8 bg-green-100 rounded mx-auto mb-1 flex items-center justify-center">
-                <span className="text-green-600 text-xs">发</span>
-              </div>
-              <span className="text-xs">发微头条</span>
             </div>
           </div>
         </CardContent>

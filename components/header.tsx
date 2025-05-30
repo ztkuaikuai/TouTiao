@@ -41,7 +41,7 @@ export default function Header() {
             </a>
           </div>
           <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="sm" className="text-white hover:bg-gray-800 hover:text-white">
+            <Button variant="ghost" size="sm" className="text-white hover:bg-gray-800 hover:text-white" onClick={() => router.push('/publish')}>
               <Edit className="w-4 h-4 mr-1" />
               发布作品
             </Button>
