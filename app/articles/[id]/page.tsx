@@ -6,6 +6,7 @@ import 'react-quill-new/dist/quill.snow.css'; // Import Quill styles
 import dynamic from 'next/dynamic';
 import { Article } from '@/app/api/articles/route';
 import { Skeleton } from '@/components/ui/skeleton'
+import FollowButton from '@/app/components/FollowButton'
 
 const ReactQuill = dynamic(() => import('react-quill-new'), { ssr: false }); // 从 react-quill-new 导入
 
@@ -162,9 +163,7 @@ export default function ArticlePage() {
                   </p>
                 </div>
               </div>
-              <button className="bg-red-500 hover:bg-red-600 text-white px-4 py-1.5 rounded text-sm font-medium shrink-0 ml-2">
-                + 关注
-              </button>
+              <FollowButton authorId={article.author_id} />
             </div>
           </div>
 
