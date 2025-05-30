@@ -6,6 +6,8 @@ import { useUserProfile } from "@/contexts/user-profile-context";
 import { ChevronRight, Edit3, Save, X, Camera } from "lucide-react";
 import { createClient } from "@/utils/supabase/client";
 import { useParams } from "next/navigation";
+import Followers from "./follow/followers";
+import Following from "./follow/following";
 
 export default function UserProfileSection() {
   const params = useParams();
@@ -178,14 +180,8 @@ export default function UserProfileSection() {
                 <h1 className="text-2xl font-bold text-gray-900">{externalProfile.name || '用户'}</h1>
               </div>
               <div className="flex items-center space-x-8 mb-4">
-                <div className="text-center">
-                  <div className="text-xl font-bold text-gray-900">0</div>
-                  <div className="text-sm text-gray-500">粉丝</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-xl font-bold text-gray-900">0</div>
-                  <div className="text-sm text-gray-500">关注</div>
-                </div>
+                <Followers userId={userIdFromParams} />
+                <Following userId={userIdFromParams} />
               </div>
               <button className="flex items-center text-gray-500 hover:text-gray-700 text-sm">
                 更多信息
@@ -271,14 +267,8 @@ export default function UserProfileSection() {
 
               {/* Stats */}
               <div className="flex items-center space-x-8 mb-4">
-                <div className="text-center">
-                  <div className="text-xl font-bold text-gray-900">0</div>
-                  <div className="text-sm text-gray-500">粉丝</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-xl font-bold text-gray-900">0</div>
-                  <div className="text-sm text-gray-500">关注</div>
-                </div>
+                <Followers userId={authUser.id} />
+                <Following userId={authUser.id} />
               </div>
 
               {/* More Info Link */}

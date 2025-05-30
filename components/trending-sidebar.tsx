@@ -5,6 +5,8 @@ import { Badge } from "@/components/ui/badge"
 import { Flame } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useUserProfile } from "@/contexts/user-profile-context"
+import Followers from "./follow/followers"
+import Following from "./follow/following"
 
 const trendingTopics = [
   { rank: 1, title: "习近平向中国西部国际博览会致贺信", isHot: true },
@@ -42,14 +44,8 @@ export default function TrendingSidebar() {
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4 text-center">
-            <div>
-              <div className="text-xl font-bold">0</div>
-              <div className="text-sm text-gray-500">粉丝</div>
-            </div>
-            <div>
-              <div className="text-xl font-bold">0</div>
-              <div className="text-sm text-gray-500">关注</div>
-            </div>
+            {profile && <Followers userId={profile.user_id} />}
+            {profile && <Following userId={profile.user_id} />}
           </div>
           <div className="grid grid-cols-1 gap-2 mt-4">
             <div className="text-center cursor-pointer" onClick={() => router.push('/publish')}>

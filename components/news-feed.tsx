@@ -3,14 +3,14 @@
 import { useRouter, useSearchParams } from "next/navigation"
 import NewsCard from "./news-card"
 import type { Article } from "@/app/api/articles/route"
-import { useEffect, useState } from "react"
+import { useEffect, useState, Suspense } from "react"
 import { Skeleton } from "@/components/ui/skeleton"
 
 interface NewsFeedProps {
   from?: 'index' | 'search'
 }
 
-export default function NewsFeed({ from = 'index' }: NewsFeedProps) {
+function NewsFeedContent({ from = 'index' }: NewsFeedProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const keyword = searchParams.get('keyword') || ''
@@ -92,4 +92,31 @@ export default function NewsFeed({ from = 'index' }: NewsFeedProps) {
       </div>
     )}
   </>)
+}
+
+export default function NewsFeed(props: NewsFeedProps) {
+  return (
+    <Suspense fallback={
+      <div className="space-y-4">
+        {[...Array(4)].map((_, i) => (
+          <div key={i} className="p-4 bg-white rounded-md shadow flex space-x-4">
+            <div className="flex-1 space-y-3">
+              <div className="flex items-center space-x-2 mb-2">
+                <Skeleton className="h-4 w-16" />
+                <Skeleton className="h-4 w-20" />
+              </div>
+              <Skeleton className="h-6 w-3/4 mb-2" />
+              <div className="flex items-center space-x-4">
+                <Skeleton className="h-4 w-10" />
+                <Skeleton className="h-4 w-10" />
+                <Skeleton className="h-4 w-10" />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    }>
+      <NewsFeedContent {...props} />
+    </Suspense>
+  )
 }
