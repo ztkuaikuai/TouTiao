@@ -2,11 +2,12 @@
 
 import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css'; // Import Quill styles
-import { Router } from 'lucide-react';
+import dynamic from 'next/dynamic';
 import { Article } from '@/app/api/articles/route';
 import { Skeleton } from '@/components/ui/skeleton'
+
+const ReactQuill = dynamic(() => import('react-quill-new'), { ssr: false }); // 从 react-quill-new 导入
 
 export const formatDate = (dateString: string) => {
   if (!dateString) return '';
