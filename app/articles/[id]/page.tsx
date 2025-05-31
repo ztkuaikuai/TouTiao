@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import 'react-quill-new/dist/quill.snow.css'; // Import Quill styles
 import dynamic from 'next/dynamic';
@@ -9,6 +9,9 @@ import { Skeleton } from '@/components/ui/skeleton'
 import FollowButton from '@/app/components/FollowButton'
 import LikeButton from '@/app/components/LikeButton'
 import FavoriteButton from '@/app/components/FavoriteButton'
+import CommentSection from '@/app/components/CommentSection'
+import { useUser } from '@/hooks/use-user'
+import FloatingActionButtons from '@/components/floating-action-buttons';
 
 const ReactQuill = dynamic(() => import('react-quill-new'), { ssr: false }); // 从 react-quill-new 导入
 
@@ -29,10 +32,22 @@ export default function ArticlePage() {
   const articleId = params.id
 
   const router = useRouter()
+  const [user] = useUser()
+  const commentSectionRef = useRef<HTMLDivElement>(null)
 
   const [article, setArticle] = useState<Article | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+
+  // 滚动到评论区
+  const scrollToComments = () => {
+    if (commentSectionRef.current) {
+      commentSectionRef.current.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      })
+    }
+  }
 
   useEffect(() => {
     if (articleId) {
@@ -114,10 +129,6 @@ export default function ArticlePage() {
     return <div className="flex justify-center items-center h-screen p-4 text-center">文章未找到。</div>
   }
 
-  // Split content into paragraphs. Assumes content has newlines for paragraphs.
-  // Filter out empty strings that might result from multiple newlines.
-  const contentParagraphs = article.content.split(/\r\n|\n|\r/).filter(p => p.trim() !== '');
-
   return (
     <div className="container mx-auto px-2 sm:px-4 py-4 max-w-5xl"> {/* Main container */}
       <div className="flex flex-col lg:flex-row">
@@ -127,11 +138,13 @@ export default function ArticlePage() {
         {/* For now, it will stack vertically and then become a sticky sidebar on larger screens */}
         <div className="w-full lg:w-20 flex lg:flex-col justify-center items-center space-x-4 lg:space-x-0 lg:space-y-8 py-4 lg:py-0 lg:sticky lg:top-24 self-start order-2 lg:order-1 lg:mr-6">
           <LikeButton articleId={Number(articleId)} initialLikesCount={article.likes_count || 0} />
-          <button className="flex flex-col items-center text-gray-700 hover:text-green-600 transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
-            <span className="text-xs mt-1">{article.comments_count ?? '评论'}</span>
-          </button>
           <FavoriteButton articleId={Number(articleId)} initialFavoritesCount={article.favorites_count || 0} />
+          <button 
+            className="flex flex-col items-center text-gray-700 hover:text-green-600 transition-colors"
+            onClick={scrollToComments}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
+          </button>
         </div>
 
         {/* Main Article Content */}
@@ -179,8 +192,18 @@ export default function ArticlePage() {
               <p>内容为空。</p>
             )}
           </div>
+
+          {/* 评论区 */}
+          <div ref={commentSectionRef}>
+            <CommentSection 
+              articleId={Number(articleId)} 
+              userId={user?.id || null} 
+              commentsCount={article.comments_count || 0} 
+            />
+          </div>
         </div>
       </div>
+      <FloatingActionButtons />
     </div>
   )
 }
