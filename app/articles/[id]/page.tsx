@@ -7,6 +7,7 @@ import dynamic from 'next/dynamic';
 import { Article } from '@/app/api/articles/route';
 import { Skeleton } from '@/components/ui/skeleton'
 import FollowButton from '@/app/components/FollowButton'
+import LikeButton from '@/app/components/LikeButton'
 
 const ReactQuill = dynamic(() => import('react-quill-new'), { ssr: false }); // 从 react-quill-new 导入
 
@@ -124,10 +125,7 @@ export default function ArticlePage() {
         {/* On small screens, this could be at the bottom or a horizontal bar */}
         {/* For now, it will stack vertically and then become a sticky sidebar on larger screens */}
         <div className="w-full lg:w-20 flex lg:flex-col justify-center items-center space-x-4 lg:space-x-0 lg:space-y-8 py-4 lg:py-0 lg:sticky lg:top-24 self-start order-2 lg:order-1 lg:mr-6">
-          <button className="flex flex-col items-center text-gray-700 hover:text-blue-600 transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 016.364 0l.318.318.318-.318a4.5 4.5 0 116.364 6.364L12 20.364l-7.682-7.682a4.5 4.5 0 010-6.364z" /></svg>
-            <span className="text-xs mt-1">{article.likes_count ?? '赞'}</span>
-          </button>
+          <LikeButton articleId={Number(articleId)} initialLikesCount={article.likes_count || 0} />
           <button className="flex flex-col items-center text-gray-700 hover:text-green-600 transition-colors">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
             <span className="text-xs mt-1">{article.comments_count ?? '评论'}</span>
