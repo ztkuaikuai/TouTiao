@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import UserFollowModal from './user-follow-modal'
 
 interface FollowersProps {
   userId: string
@@ -10,6 +11,8 @@ export default function Followers({ userId }: FollowersProps) {
   const [followersCount, setFollowersCount] = useState<number>(0)
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+  const [followers, setFollowers] = useState<any[]>([])
 
   useEffect(() => {
     if (!userId) return
@@ -27,6 +30,8 @@ export default function Followers({ userId }: FollowersProps) {
         
         const data = await response.json()
         
+        // 保存粉丝数据
+        setFollowers(Array.isArray(data) ? data : [])
         // 设置粉丝数量
         setFollowersCount(Array.isArray(data) ? data.length : 0)
       } catch (err) {
@@ -39,6 +44,14 @@ export default function Followers({ userId }: FollowersProps) {
 
     fetchFollowersCount()
   }, [userId])
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true)
+  }
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false)
+  }
 
   if (loading) {
     return (
@@ -59,9 +72,19 @@ export default function Followers({ userId }: FollowersProps) {
   }
 
   return (
-    <div className="text-center">
-      <div className="text-xl font-bold">{followersCount}</div>
-      <div className="text-sm text-gray-500">粉丝</div>
-    </div>
+    <>
+      <div className="text-center cursor-pointer" onClick={handleOpenModal}>
+        <div className="text-xl font-bold">{followersCount}</div>
+        <div className="text-sm text-gray-500">粉丝</div>
+      </div>
+
+      <UserFollowModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        title="粉丝列表"
+        users={followers}
+        type="followers"
+      />
+    </>
   )
 }
