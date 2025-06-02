@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { UserProfileProvider } from "@/contexts/user-profile-context"
 import Header from "@/components/header"
 import { Toaster } from "@/components/ui/toaster"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -66,6 +67,7 @@ export default function RootLayout({
           </UserProfileProvider>
           <Toaster />
         </ThemeProvider>
+        <SpeedInsights />
       </body>
     </html>
   )
