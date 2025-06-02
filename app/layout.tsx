@@ -7,6 +7,7 @@ import { UserProfileProvider } from "@/contexts/user-profile-context"
 import Header from "@/components/header"
 import { Toaster } from "@/components/ui/toaster"
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Analytics } from '@vercel/analytics/next';
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -68,6 +69,7 @@ export default function RootLayout({
           <Toaster />
         </ThemeProvider>
         <SpeedInsights />
+        <Analytics />
       </body>
     </html>
   )
